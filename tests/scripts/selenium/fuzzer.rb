@@ -115,7 +115,16 @@ end
 browserdriver = ARGV[0].to_sym
 editor_url = ARGV[1]
 replay_file = ARGV[2]
-if browserdriver == :firefox
+if browserdriver == :sauce
+  caps = Selenium::WebDriver::Remote::Capabilities.chrome
+  caps.platform = "Windows 7"
+  caps.version = "24"
+  caps.native_events = true
+  driver = Selenium::WebDriver.for(
+    :remote,
+    :url => "http://byronm:c16a8f85-54e8-48ab-aef3-1fc6e4abcb7a@ondemand.saucelabs.com:80/wd/hub",
+    :desired_capabilities => caps)
+elsif browserdriver == :firefox
   profile = Selenium::WebDriver::Firefox::Profile.new
   profile.native_events = true
   driver = Selenium::WebDriver.for browserdriver, :profile => profile
