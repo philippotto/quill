@@ -131,6 +131,13 @@ module ScribeDriver
     @@driver.manage.timeouts.implicit_wait = 10
     @@driver.get url
     @@driver.switch_to.frame(@@driver.find_element(:tag_name, "iframe"))
+    # Ensure that js has loaded/executed before proceeding
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    begin
+      wait.until { ScribeDriver::JS.execute_js "return window.ScribeDriver != 'undefined' && window.ScribeDriver !== null;" }
+    rescue Exception => e
+      throw "Failed to load scribe_driver.js. Abandoning ship."
+    end
     return @@driver
   end
 end
