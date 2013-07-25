@@ -20,6 +20,10 @@ module ScribeDriver
       return self.execute_js "return window.editor.getSelection().start.index"
     end
 
+    def self.get_selection
+      return self.execute_js "return {'start': window.editor.getSelection().start.index, 'end': window.editor.getSelection().end.index, 'isBackwards': window.editor.getSelection().isBackwards};"
+    end
+
     def self.get_as_str(ref)
       return self.execute_js "return JSON.stringify(window.ScribeDriver['#{ref}'])"
     end

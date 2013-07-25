@@ -105,10 +105,14 @@ class WebdriverAdapter
     @cursor_pos = dest_index
   end
 
-  def highlight(length)
-    keys = (0...length).to_a.map! { :arrow_right }
+  def highlight(length, reverse = false)
+    keys = (0...length).to_a.map! { if reverse then :arrow_left else :arrow_right end }
     @cursor_pos += length
     @driver.action.key_down(:shift).send_keys(*keys).key_up(:shift).perform
+  end
+
+  def highlight_all
+    @driver.action.key_down(@@cmd_modifier).send_keys("a").key_up(@@cmd_modifier).perform
   end
 
   def delete(length)
