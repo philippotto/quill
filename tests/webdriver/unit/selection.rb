@@ -17,7 +17,7 @@ describe "Highlight" do
 
   it "should highlight newline" do
     start_delta = { "startLength" => 0,
-                    "endLength" => 7,
+                    "endLength" => 8,
                     "ops" => [{ "value" => "abc\ndef\n", "attributes" => {}}]}
     reset_scribe start_delta
 
@@ -31,7 +31,7 @@ describe "Highlight" do
 
   it "should highlight from head to tail" do
     start_delta = { "startLength" => 0,
-                    "endLength" => 7,
+                    "endLength" => 8,
                     "ops" => [{ "value" => "abc\ndef\n", "attributes" => {}}]}
     reset_scribe start_delta
 
@@ -45,7 +45,7 @@ describe "Highlight" do
 
   it "should highlight from tail to head" do
     start_delta = { "startLength" => 0,
-                    "endLength" => 7,
+                    "endLength" => 8,
                     "ops" => [{ "value" => "abc\ndef\n", "attributes" => {}}]}
     reset_scribe start_delta
 
@@ -60,7 +60,7 @@ describe "Highlight" do
 
   it "should highlight all" do
     start_delta = { "startLength" => 0,
-                    "endLength" => 7,
+                    "endLength" => 8,
                     "ops" => [{ "value" => "abc\ndef\n", "attributes" => {}}]}
     reset_scribe start_delta
 
