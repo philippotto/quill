@@ -10,7 +10,7 @@ class Scribe.PasteManager
     @editor.renderer.addStyles(
       '.paste-container':
         'left': '-10000px'
-        'position': 'fixed'
+        'position': 'absolute'
         'top': '50%'
     )
     @editor.renderer.addContainer(@container)
@@ -34,6 +34,7 @@ class Scribe.PasteManager
         delta.endLength += (@editor.getLength() - (range.end.index - range.start.index))
         delta.startLength = oldDocLength
         @editor.applyDelta(delta, { source: 'user' })
+        @editor.root.focus()
         @editor.setSelection(new Scribe.Range(@editor, range.start.index + lengthAdded, range.start.index + lengthAdded))
       )
     )

@@ -65,6 +65,7 @@ class Scribe.Renderer extends EventEmitter2
 
 
   constructor: (@container, options = {}) ->
+    options = options.renderer or {}
     originalStyles = options.styles
     @options = _.defaults(options, Scribe.Renderer.DEFAULTS)
     @options.styles = originalStyles
@@ -106,7 +107,7 @@ class Scribe.Renderer extends EventEmitter2
     html = @container.innerHTML
     @container.innerHTML = ''
     @iframe = @container.ownerDocument.createElement('iframe')
-    @iframe.frameborder = '0'
+    @iframe.frameBorder = '0'
     @iframe.height = @iframe.width = '100%'
     @container.appendChild(@iframe)
     @root = this.getDocument().createElement('div')
@@ -115,8 +116,11 @@ class Scribe.Renderer extends EventEmitter2
     @root.innerHTML = Scribe.Normalizer.normalizeHtml(html) if @options.keepHTML
     this.runWhenLoaded( =>
       doc = this.getDocument()
-      doc.body.appendChild(@root) if doc?
-      Scribe.DOM.addEventListener(@container, 'focus', =>
+      doc.body.appendChild(@root)
+      Scribe.DOM.addEventListener(doc.body, 'click', =>
+        @root.focus()
+      )
+      Scribe.DOM.addEventListener(@container, 'click', =>
         @root.focus()
       )
     )

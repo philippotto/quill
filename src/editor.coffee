@@ -18,14 +18,19 @@ initListeners = ->
     onEditOnce = _.once(onEdit)
     return if @ignoreDomChanges or !@renderer.iframe.parentNode?    # Make sure we have not been deleted
     this.update()
-  onSubtreeModified = (arg1, arg2) =>
+  onSubtreeModified = =>
     return if @ignoreDomChanges
     toCall = onEditOnce
     _.defer( =>
       toCall.call(null)
     )
   onEditOnce = _.once(onEdit)
-  Scribe.DOM.addEventListener(@root, 'DOMSubtreeModified', onSubtreeModified)
+  innerHTML = null
+  setInterval( =>
+    if innerHTML != @root.innerHTML
+      onSubtreeModified()
+      innerHTML = @root.innerHTML
+  , 100)
 
 deleteAt = (index, length) ->
   return if length <= 0
@@ -135,6 +140,7 @@ class Scribe.Editor extends EventEmitter2
     cursor: 0
     enabled: true
     onReady: ->
+    formatManager: {}
     renderer: {}
     undoManager: {}
 
@@ -172,13 +178,13 @@ class Scribe.Editor extends EventEmitter2
     @ignoreDomChanges = true
     @options.renderer.keepHTML = keepHTML
     @iframeContainer.innerHTML = @root.innerHTML if @root?
-    @renderer = new Scribe.Renderer(@iframeContainer, @options.renderer)
+    @renderer = new Scribe.Renderer(@iframeContainer, @options)
     @contentWindow = @renderer.iframe.contentWindow
     @root = @renderer.root
-    @doc = new Scribe.Document(@root)
+    @doc = new Scribe.Document(@root, @options)
     @keyboard = new Scribe.Keyboard(this)
     @selection = new Scribe.Selection(this)
-    @undoManager = new Scribe.UndoManager(this, @options.undoManager)
+    @undoManager = new Scribe.UndoManager(this, @options)
     @pasteManager = new Scribe.PasteManager(this)
     @renderer.runWhenLoaded(@options.onReady)
     initListeners.call(this)

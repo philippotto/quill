@@ -56,11 +56,12 @@ class Scribe.Format.Class extends Scribe.Format.Span
 class Scribe.Format.Style extends Scribe.Format.Span
   @getStyleObject: (container) ->
     styleString = container.getAttribute('style') or ''
-    return _.reduce(styleString.split(';').slice(0, -1), (styles, str) ->
+    return _.reduce(styleString.split(';'), (styles, str) ->
       [name, value] = str.split(':')
-      name = name.slice(1) if name[0] == ' '
-      value = value.slice(1) if value[0] == ' '
-      styles[name] = value
+      if name and value
+        name = name.slice(1) if name.slice(0, 1) == " "
+        value = value.slice(1) if value.slice(0, 1) == " "
+        styles[name.toLowerCase()] = value
       return styles
     , {})
 
@@ -74,7 +75,7 @@ class Scribe.Format.Style extends Scribe.Format.Span
   constructor: (@root, @keyName, @cssName, @styles, @matchFn) ->
     @matchFn or= (cssValue) =>
       for key,value of @styles
-        return key if value == cssValue
+        return key if value.toUpperCase() == cssValue.toUpperCase()
       return false
     super
 
@@ -123,7 +124,7 @@ class Scribe.Format.Link extends Scribe.Format.Tag
 
   createContainer: (value) ->
     link = super(value)
-    value = 'https://' + value unless value.match(/https?:\/\//)
+    value = 'http://' + value unless value.match(/^https?:\/\//)
     link.href = value
     link.href = 'about:blank' if (link.protocol != 'http:' && link.protocol != 'https:')
     link.title = link.href
@@ -174,7 +175,7 @@ class Scribe.Format.Color extends Scribe.Format.Style
   @matchColor: (cssValue) ->
     color = Scribe.Format.Color.normalizeColor(cssValue)
     for key,value of @styles
-      return key if value == color
+      return key if value.toUpperCase() == color.toUpperCase()
     return false
 
   constructor: (@root) ->
@@ -190,7 +191,7 @@ class Scribe.Format.Family extends Scribe.Format.Style
       'monospace' : "'Courier New', monospace"
     }, (cssValue) =>
       for key,value of @styles
-        return key if value.indexOf(cssValue) >= 0
+        return key if value.indexOf(key) > -1
       return false
     )
 
