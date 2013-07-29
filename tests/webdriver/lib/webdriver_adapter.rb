@@ -112,7 +112,12 @@ class WebdriverAdapter
   end
 
   def highlight_all
-    @driver.action.key_down(@@cmd_modifier).send_keys("a").key_up(@@cmd_modifier).perform
+    @driver
+    .action
+    .key_down(@@cmd_modifier)
+    .send_keys("a")
+    .key_up(@@cmd_modifier)
+    .perform
   end
 
   def delete(length)

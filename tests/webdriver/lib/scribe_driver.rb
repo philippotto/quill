@@ -47,7 +47,7 @@ module ScribeDriver
     end
 
     def self.make_insert_delta(startLength, index, value, attributes)
-      return self.execute_js "return window.ScribeDriver.autoFormatDelta(window.Tandem.Delta.makeInsertDelta(#{startLength}, #{index}, '#{value}', #{attributes}));"
+      return JSON.parse self.execute_js "return JSON.stringify(window.ScribeDriver.autoFormatDelta(window.Tandem.Delta.makeInsertDelta(#{startLength}, #{index}, '#{value}', #{attributes})));"
     end
 
     def self.set_scribe_delta(delta)
