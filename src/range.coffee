@@ -1,13 +1,15 @@
-Scribe = require('./scribe')
+_ = require('underscore')
+ScribeLeafIterator = require('./leaf-iterator')
+ScribePosition = require('./position')
 
 
-class Scribe.Range
+class ScribeRange
   # constructor: (Editor editor, Number startIndex, Number endIndex) ->
   # constructor: (Editor editor, Object start, Object end) ->
   constructor: (@editor, @start, @end) ->
     # TODO initialize with index
-    @start = new Scribe.Position(@editor, @start) if _.isNumber(@start)
-    @end = new Scribe.Position(@editor, @end) if _.isNumber(@end)
+    @start = new ScribePosition(@editor, @start) if _.isNumber(@start)
+    @end = new ScribePosition(@editor, @end) if _.isNumber(@end)
 
   deleteContents: (options)->
     return if this.isCollapsed()
@@ -43,7 +45,7 @@ class Scribe.Range
     leaves.pop() if leaves.length > 1 && @end.offset == 0
     leaves.splice(0, 1) if leaves.length > 1 && @start.offset == leaves[0].length
     formats = if leaves.length > 0 then leaves[0].getFormats() else {}
-    _.all(leaves, (leaf) ->
+    _.all(leaves.slice(1), (leaf) ->
       leafFormats =  leaf.getFormats()
       _.each(formats, (value, key) ->
         if !leafFormats[key]
@@ -62,13 +64,13 @@ class Scribe.Range
 
   getLeafNodes: ->
     return [@start.leafNode] if this.isCollapsed()
-    leafIterator = new Scribe.LeafIterator(@start.getLeaf(), @end.getLeaf())
+    leafIterator = new ScribeLeafIterator(@start.getLeaf(), @end.getLeaf())
     leafNodes = _.pluck(leafIterator.toArray(), 'node')
     leafNodes.pop() if leafNodes[leafNodes.length - 1] != @end.leafNode || @end.offset == 0
     return leafNodes
 
   getLeaves: ->
-    itr = new Scribe.LeafIterator(@start.getLeaf(), @end.getLeaf())
+    itr = new ScribeLeafIterator(@start.getLeaf(), @end.getLeaf())
     arr = itr.toArray()
     return arr
 
@@ -112,4 +114,4 @@ class Scribe.Range
     return @start.leafNode == @end.leafNode && @start.offset == @end.offset
 
 
-module.exports = Scribe
+module.exports = ScribeRange

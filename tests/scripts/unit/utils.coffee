@@ -1,8 +1,8 @@
-describe('DOM', ->
+describe('Utils', ->
   describe('splitNode', ->
     splitTest = new Scribe.Test.HtmlTest(
       fn: (testContainer, expectedContainer, offset) ->
-        Scribe.DOM.splitNode(testContainer.firstChild, offset)
+        Scribe.Utils.splitNode(testContainer.firstChild, offset)
     )
 
     splitTest.run('should not split if not necessary 1',
@@ -60,7 +60,7 @@ describe('DOM', ->
   describe('splitBefore', ->
     splitTest = new Scribe.Test.HtmlTest(
       fn: (testContainer, expectedContainer, target) ->
-        Scribe.DOM.splitBefore(target, testContainer)
+        Scribe.Utils.splitBefore(target, testContainer)
       pre: (testContainer, expectedContainer) ->
         return testContainer.querySelector('#target')
     )
@@ -130,7 +130,7 @@ describe('DOM', ->
 
     traverseTest.run('should traverse with correct index',
       checker: (container) ->
-        Scribe.DOM.traversePreorder(container.firstChild, 0, (node, offset) ->
+        Scribe.Utils.traversePreorder(container.firstChild, 0, (node, offset) ->
           if node.nodeType == Scribe.DOM.ELEMENT_NODE
             expect(offset).to.equal(expected[Scribe.DOM.getText(node)])
           return node
@@ -153,7 +153,7 @@ describe('DOM', ->
           </span>
         </div>'
       fn: (container) ->
-        Scribe.DOM.traversePreorder(container.firstChild, 0, (node, offset) ->
+        Scribe.Utils.traversePreorder(container.firstChild, 0, (node, offset) ->
           if node.nodeType == Scribe.DOM.ELEMENT_NODE
             expect(offset).to.equal(expected[Scribe.DOM.getText(node)])
             node = Scribe.DOM.switchTag(node, 'SPAN') if node.tagName != 'SPAN'
@@ -175,7 +175,7 @@ describe('DOM', ->
           </h3>
         </div>'
       fn: (container) ->
-        Scribe.DOM.traversePreorder(container.firstChild, 0, (node, offset) ->
+        Scribe.Utils.traversePreorder(container.firstChild, 0, (node, offset) ->
           if node.nodeType == Scribe.DOM.ELEMENT_NODE
             expect(offset).to.equal(expected[Scribe.DOM.getText(node)])
             if node.tagName == 'H2'

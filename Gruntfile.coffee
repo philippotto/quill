@@ -12,7 +12,7 @@ module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig
     meta:
-      version: '0.7.2'
+      version: '0.7.3'
 
     clean: ['build']
 
@@ -45,8 +45,10 @@ module.exports = (grunt) ->
       options:
         extensions: ['.js', '.coffee']
         requires: ['tandem-core']
-      src:
+      scribe:
         files: [{ dest: 'build/scribe.js', src: ['src/scribe.coffee'] }]
+      scribe_exposed:
+        files: [{ dest: 'build/scribe-exposed.js', src: ['tests/scripts/scribe-exposed.coffee'] }]
       tandem_wrapper:
         files: [{ dest: 'build/lib/tandem-core.js', src: ['tests/scripts/tandem.coffee'] }]
 
@@ -85,14 +87,6 @@ module.exports = (grunt) ->
             'build/src/ext/footer.js'
           ]
         }]
-      scribe:
-        files: [{
-          dest: 'build/scribe.js'
-          src: [
-            'vendor/assets/javascripts/rangy-core.js'
-            'build/scribe.js'
-          ]
-        }]
 
     haml:
       demo:
@@ -121,14 +115,14 @@ module.exports = (grunt) ->
         files: ['demo/*.haml']
         tasks: ['haml:demo']
       haml_tests:
-        files: ['tests/*.haml']
+        files: ['tests/*.haml', 'tests/testem/*.haml']
         tasks: ['haml:tests']
       sass:
         files: ['demo/styles/*.sass']
         tasks: ['sass:demo']
       src:
         files: ['src/**/*.coffee', 'node_modules/tandem-core/src/*']
-        tasks: ['coffee:src', 'coffeeify:src', 'concat', 'copy:build']
+        tasks: ['coffee:src', 'coffeeify', 'concat', 'copy:build']
       test:
         files: ['tests/scripts/**/**/*.coffee']
         tasks: ['coffee:test']
