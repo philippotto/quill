@@ -200,6 +200,16 @@ class WebdriverAdapter
     @editor.send_keys ""
   end
 
+  def set_url(url)
+    link_edit_box = @driver.find_element(:css, "#link-tooltip input[type='text']")
+    link_edit_box.clear
+    link_edit_box.send_keys url
+  end
+
+  def dismiss_link_ui
+    @editor.click
+  end
+
   def self.os
     host_os = RbConfig::CONFIG['host_os']
     case host_os
