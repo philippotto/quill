@@ -25,7 +25,7 @@ describe "Link formatting" do
 
     reset_scribe initial
     ScribeDriver::JS.set_current_delta delta
-    @adapter.apply_delta delta, "Couldn't apply"
+    @adapter.apply_delta delta
     @adapter.set_url(LINK)
     @adapter.dismiss_link_ui
     success = ScribeDriver::JS.check_consistency
