@@ -160,5 +160,37 @@ describe "Insert" do
 
       run_insert_test start_delta, current_delta, "Failed appending tab."
     end
+
+    focus
+    it "should autoformat with previous line's attributes" do
+      start_delta = { "startLength" => 0,
+                      "endLength" => 4,
+                      "ops" => [{ "value" => "abc", "attributes" => {"italic" => true}},
+                                { "value" => "\n", "attributes" => {}}]
+      }
+
+      current_delta = { "startLength" => 4,
+                        "endLength" => 8,
+                        "ops" => [{ "start" => 0, "end" => 3, "attributes" => {}},
+                                  { "value" => "\n", "attributes" => {} },
+                                  { "value" => "def", "attributes" => {"italic" => true}},
+                                  { "start" => 3, "end" => 4, "attribute" => {}}]
+
+      }
+
+      ScribeDriver::JS.set_current_delta current_delta
+      reset_scribe start_delta
+
+      # TODO: Use apply_delta and update autoFormatDelta once Scribe is updated
+      # to autoformat with previous line's attributes.
+      @adapter.move_cursor 3
+      @adapter.type_text "\n"
+      # XXX: The sleep is to currently ensure the test fails, since the
+      # implementation is currently timing dependent.
+      sleep 2
+      @adapter.type_text "def"
+      success = ScribeDriver::JS.check_consistency
+      success.must_equal true, "Failed to autoformat with previous line's attributes."
+    end
   end
 end
