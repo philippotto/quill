@@ -161,7 +161,6 @@ describe "Insert" do
       run_insert_test start_delta, current_delta, "Failed appending tab."
     end
 
-    focus
     it "should autoformat with previous line's attributes" do
       start_delta = { "startLength" => 0,
                       "endLength" => 4,
