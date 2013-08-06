@@ -10,9 +10,6 @@ describe "Link formatting" do
     @driver.quit
   end
 
-  # Test that applying link works
-  # Test that clicking highlighting link text shows the link UI
-  # Test that modifying the link in the edit box updates the link attr
   it "should create hyperlink" do
     LINK = 'https://www.google.com'
     initial = { "startLength" => 0,
@@ -35,7 +32,7 @@ describe "Link formatting" do
     success.must_equal true, "Failed setting hyperlink"
   end
 
-  it "should update hyperlink" do
-
-  end
+  # The following tests require getting clicking inside contenteditable to work:
+  # Test that clicking highlighting link text shows the link UI
+  # Test that modifying the link in the edit box updates the link attr
 end

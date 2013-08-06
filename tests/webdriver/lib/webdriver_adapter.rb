@@ -204,6 +204,8 @@ class WebdriverAdapter
     link_edit_box = @driver.find_element(:css, "#link-tooltip input[type='text']")
     link_edit_box.clear
     link_edit_box.send_keys url
+    done = @driver.find_element(:css, "#link-tooltip .done")
+    done.click
   end
 
   def dismiss_link_ui
