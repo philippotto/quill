@@ -5,21 +5,19 @@ getColor = (id, lighten) ->
   else
     return "rgba(255, 153, 51, #{alpha})"
 
-
-initAttribution = (container, editor) ->
-  button = container.querySelector('.attribution')
+initAttribution = ($container, editor) ->
   attribution = new Scribe.Attribution(editor, editor.id, getColor(editor.id, true))
-  Scribe.DOM.addEventListener(button, 'click', ->
-    if Scribe.DOM.hasClass(button, 'active')
+  $('.attribution', $container).click( ->
+    if $(this).hasClass('active')
       attribution.disable()
     else
       attribution.enable()
-    Scribe.DOM.toggleClass(button, 'active')
+    $(this).toggleClass('active')
   )
   return attribution
 
-initEditor = (container) ->
-  editor = new Scribe.Editor(container.querySelector('.editor-container'), {
+initEditor = ($container) ->
+  editor = new Scribe.Editor($('.editor-container', $container).get(0), {
     renderer:
       styles:
         'div.editor': { 'bottom': '15px', 'top': '15px' }
@@ -63,14 +61,16 @@ initEditor = (container) ->
   )
   return editor  
 
-initToolbar = (container, editor) ->
-  toolbar = new Scribe.Toolbar(container.querySelector('.formatting-container'), editor)
-  $formattingContainer = $('.formatting-container', $(container))
+initToolbar = ($container, editor) ->
+  $formattingContainer = $('.formatting-container', $container)
+  toolbar = new Scribe.Toolbar($formattingContainer.get(0), editor)
   dropkickFormats = ['family', 'size']
   for format in dropkickFormats
     do (format) ->
       $(".#{format}", $formattingContainer).dropkick({
-        change: (value) -> editor.selection.format(format, value)
+        change: (value) -> 
+          range = editor.getSelection()
+          range.formatContents(format, value, { source: 'user' }) if range?
         width: 75
       })
   editor.on(Scribe.Editor.events.SELECTION_CHANGE, ->
@@ -81,18 +81,18 @@ initToolbar = (container, editor) ->
 
 listenEditor = (source, target) ->
   source.on(Scribe.Editor.events.USER_TEXT_CHANGE, (delta) ->
-    console.info source.id, 'text change', delta
+    console.info source.id, 'text change', delta if console?
     target.applyDelta(delta)
     sourceDelta = source.doc.toDelta()
     targetDelta = target.doc.toDelta()
-    console.assert(sourceDelta.isEqual(targetDelta), "Editor diversion!", source, target, sourceDelta, targetDelta)
+    console.assert(sourceDelta.isEqual(targetDelta), "Editor diversion!", source, target, sourceDelta, targetDelta) if console?
   ).on(Scribe.Editor.events.SELECTION_CHANGE, (range) ->
     if range?
-      console.info source.id, 'selection change', range.start.index, range.end.index
+      console.info source.id, 'selection change', range.start.index, range.end.index if console?
       cursor = target.cursorManager.setCursor(source.id, range.end.index, source.id, getColor(source.id))
       cursor.elem.querySelector('.cursor-triangle').style.borderTopColor = getColor(source.id)
     else  
-      console.info source.id, 'selection change', range
+      console.info source.id, 'selection change', range if console?
   )
 
 
@@ -101,7 +101,7 @@ $(document).ready( ->
   for num in [1, 2]
     wrapperClass = '.editor-wrapper'
     wrapperClass += if num == 1 then '.first' else '.last'
-    container = document.querySelector(wrapperClass)
+    container = $(wrapperClass)
     editor = initEditor(container)
     editor.attributionManager = initAttribution(container, editor)
     editor.toolbar = initToolbar(container, editor)

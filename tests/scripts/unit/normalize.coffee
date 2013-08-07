@@ -105,31 +105,6 @@ describe('Normalize', ->
     lineTest = new Scribe.Test.HtmlTest(
       fn: (lineNode) ->
         normalizer.normalizeLine(lineNode)
-        normalizer.optimizeLine(lineNode)
-    )
-
-    lineTest.run('merge adjacent equal nodes', 
-      initial:  '<b>Bold1</b><b>Bold2</b>'
-      expected: '<b>Bold1Bold2</b>'
-    )
-
-    lineTest.run('merge adjacent equal spans',
-      initial:
-        '<span style="color: #F00;">
-          <span style="background-color: #0FF;">Red1</span>
-        </span>
-        <span style="color: #F00;">
-          <span style="background-color: #0FF;">Red2</span>
-        </span>'
-      expected:
-        '<span style="color: #F00;">
-          <span style="background-color: #0FF;">Red1Red2</span>
-        </span>'
-    )
-
-    lineTest.run('do not merge adjacent unequal spans',
-      initial:  '<span style="font-size: 32px;">Huge</span><span style="font-size: 18px;">Large</span>'
-      expected: '<span style="font-size: 32px;">Huge</span><span style="font-size: 18px;">Large</span>'
     )
 
     lineTest.run('preserve style attributes', 
@@ -173,20 +148,6 @@ describe('Normalize', ->
     lineTest.run('wrap text node next to element node', 
       initial:  'Hey<b>Bold</b>'
       expected: '<span>Hey</span><b>Bold</b>'
-    )
-  )
-
-  describe('optimizeLine', ->
-    normalizer = null
-    before( ->
-      container = $('#test-container').get(0)
-      formatManager = new Scribe.FormatManager(container)
-      normalizer = new Scribe.Normalizer(container, formatManager)
-    )
-
-    lineTest = new Scribe.Test.HtmlTest(
-      fn: (container) ->
-        normalizer.optimizeLine(container)
     )
 
     lineTest.run('unnecessary break', 
@@ -283,7 +244,6 @@ describe('Normalize', ->
         lineNode.firstChild.setAttribute('data-test', 'test')
         lineNode.firstChild.setAttribute('width', '100px')
         normalizer.normalizeLine(lineNode)
-        normalizer.optimizeLine(lineNode)
     )
 
     attrTest.run('strip extraneous attributes', 
