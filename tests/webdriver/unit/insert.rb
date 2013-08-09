@@ -34,7 +34,7 @@ describe "Insert" do
   end
 
   def insert_at_every_position(text)
-    ScribeDriver::JS.execute_js("window.ScribeDriver.resetScribe()")
+    ScribeDriver::JS.execute("window.ScribeDriver.resetScribe()")
     @editor = @driver.find_element(:class, "editor")
     @adapter = WebdriverAdapter.new @driver, @editor
     @adapter.focus()

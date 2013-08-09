@@ -18,22 +18,22 @@ coverage:
 	@rm -rf tmp
 	@grunt > /dev/null
 
-webdriver-fuzzer-chrome:
+fuzzer-chrome:
 	@ruby tests/webdriver/fuzzer.rb chrome
 
-webdriver-fuzzer-firefox:
+fuzzer-firefox:
 	@ruby tests/webdriver/fuzzer.rb firefox
 
-webdriver-fuzzer-chrome-replay:
+fuzzer-chrome-replay:
 	@ruby tests/webdriver/fuzzer.rb chrome $(replay_file)
 
-webdriver-fuzzer-firefox-replay:
+fuzzer-firefox-replay:
 	@ruby tests/webdriver/fuzzer.rb firefox $(replay_file)
 
-webdriver-unit-chrome:
+unit-chrome:
 	@ruby tests/webdriver/unit/unit_runner.rb chrome
 
-webdriver-unit-firefox:
+unit-firefox:
 	@ruby tests/webdriver/unit/unit_runner.rb firefox
 
 test:

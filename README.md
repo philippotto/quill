@@ -124,13 +124,13 @@ To be clear the tunnel private key should be left blank. Then to run on the remo
 ### Webdriver Testing
 For webdriver unit tests, run:
     
-    make webdriver-unit-chrome
-    make webdriver-unit-firefox
+    make unit-chrome
+    make unit-firefox
     
 For the fuzzer, run:
 
-    make webdriver-fuzzer-[browser]
-    make webdriver-fuzzer-[browser]-replay _replay_file_
+    make fuzzer-[browser]
+    make fuzzer-[browser]-replay _replay_file_
 
 Possible values for ```_browser_``` are ```chrome```, ```internet_explorer```, or ```firefox```.
 ```_replay_file_``` must be the absolute path to the file the fuzzer creates after a failed run.

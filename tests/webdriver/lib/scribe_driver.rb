@@ -10,7 +10,7 @@ require 'minitest/pride' unless WebdriverAdapter.os() == :windows
 
 module ScribeDriver
   module JS
-    def self.execute_js(src, args = nil)
+    def self.execute(src, args = nil)
       ScribeDriver.driver.switch_to.default_content
       result = ScribeDriver.driver.execute_script(src, *args)
       ScribeDriver.driver.switch_to.frame(ScribeDriver.driver.find_element(:tag_name, "iframe"))
@@ -18,60 +18,60 @@ module ScribeDriver
     end
 
     def self.get_cursor_position
-      return self.execute_js "return window.editor.getSelection().start.index"
+      return self.execute "return window.editor.getSelection().start.index"
     end
 
     def self.get_selection
-      return self.execute_js "return {'start': window.editor.getSelection().start.index, 'end': window.editor.getSelection().end.index, 'isBackwards': window.editor.getSelection().isBackwards};"
+      return self.execute "return {'start': window.editor.getSelection().start.index, 'end': window.editor.getSelection().end.index, 'isBackwards': window.editor.getSelection().isBackwards};"
     end
 
     def self.get_as_str(ref)
-      return self.execute_js "return JSON.stringify(window.ScribeDriver['#{ref}'])"
+      return self.execute "return JSON.stringify(window.ScribeDriver['#{ref}'])"
     end
 
     def self.get_expected_as_str
       src = "return JSON.stringify(window.ScribeDriver.docDelta.compose(window.ScribeDriver.currentDelta));"
-      return self.execute_js src
+      return self.execute src
     end
 
     def self.get_cur_doc_delta_as_str
-      return execute_js "return JSON.stringify(editor.getDelta());"
+      return execute "return JSON.stringify(editor.getDelta());"
     end
 
     def self.set_scribe_delta(driver)
-      return execute_js "window.ScribeDriver.initializeScribe()"
+      return execute "window.ScribeDriver.initializeScribe()"
     end
 
     def self.editor_delta_equals(delta)
-      return self.execute_js "return window.ScribeDriver.createDelta(#{delta.to_json}).isEqual(window.editor.getDelta())"
+      return self.execute "return window.ScribeDriver.createDelta(#{delta.to_json}).isEqual(window.editor.getDelta())"
     end
 
     def self.make_insert_delta(startLength, index, value, attributes)
-      return JSON.parse self.execute_js "return JSON.stringify(window.ScribeDriver.autoFormatDelta(window.Tandem.Delta.makeInsertDelta(#{startLength}, #{index}, '#{value}', #{attributes})));"
+      return JSON.parse self.execute "return JSON.stringify(window.ScribeDriver.autoFormatDelta(window.Tandem.Delta.makeInsertDelta(#{startLength}, #{index}, '#{value}', #{attributes})));"
     end
 
     def self.set_scribe_delta(delta)
-      self.execute_js "window.editor.setDelta(window.ScribeDriver.createDelta(#{delta.to_json}));"
+      self.execute "window.editor.setDelta(window.ScribeDriver.createDelta(#{delta.to_json}));"
     end
 
     def self.set_doc_delta(delta = nil)
       if not delta.nil?
-        self.execute_js "window.ScribeDriver.docDelta = window.ScribeDriver.createDelta(#{delta.to_json});"
+        self.execute "window.ScribeDriver.docDelta = window.ScribeDriver.createDelta(#{delta.to_json});"
       else
-        self.execute_js "window.ScribeDriver.docDelta = window.ScribeDriver.cleanup(editor.getDelta());"
+        self.execute "window.ScribeDriver.docDelta = window.ScribeDriver.cleanup(editor.getDelta());"
       end
     end
 
     def self.get_doc_length
-      return self.execute_js "return window.editor.getLength();"
+      return self.execute "return window.editor.getLength();"
     end
 
     def self.check_consistency
-      return self.execute_js "return window.ScribeDriver.checkConsistency();"
+      return self.execute "return window.ScribeDriver.checkConsistency();"
     end
 
     def self.set_current_delta(delta)
-      return self.execute_js "window.ScribeDriver.currentDelta = window.ScribeDriver.createDelta(#{delta.to_json})"
+      return self.execute "window.ScribeDriver.currentDelta = window.ScribeDriver.createDelta(#{delta.to_json})"
     end
   end
 
@@ -139,7 +139,7 @@ module ScribeDriver
     # Ensure that js has loaded/executed before proceeding
     wait = Selenium::WebDriver::Wait.new(:timeout => 10)
     begin
-      wait.until { ScribeDriver::JS.execute_js "return window.ScribeDriver != 'undefined' && window.ScribeDriver !== null;" }
+      wait.until { ScribeDriver::JS.execute "return window.ScribeDriver != 'undefined' && window.ScribeDriver !== null;" }
     rescue Exception => e
       throw "Failed to load scribe_driver.js. Abandoning ship."
     end
