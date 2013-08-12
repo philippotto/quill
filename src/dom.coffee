@@ -1,9 +1,6 @@
-_ = require('underscore')
-
-
 ScribeDOM =
   ELEMENT_NODE: 1
-  NOBREAK_SPACE:  "&nbps;"
+  NOBREAK_SPACE:  "&nbsp;"
   TEXT_NODE: 3
   ZERO_WIDTH_NOBREAK_SPACE:  "\uFEFF"
 
@@ -18,13 +15,17 @@ ScribeDOM =
     callback = (event) ->
       event ?= ScribeDOM.getWindow(node).event
       event.target ?= event.srcElement
-      listener.call(null, event)
+      event.which ?= event.keyCode
+      bubbles = listener.call(null, event)
+      if bubbles == false
+        if event.preventDefault then event.preventDefault() else event.returnValue = false
+        return false
     if node.addEventListener?
-      return node.addEventListener(eventName, callback)
+      node.addEventListener(eventName, callback)
     else if node.attachEvent?
-      if _.indexOf(['change', 'click', 'focus', 'keydown', 'keyup', 'mousedown', 'mouseup', 'paste'], eventName) > -1
-        return node.attachEvent("on#{eventName}", callback)
-    throw new Error("Cannot attach to unsupported event #{eventName}")
+      node.attachEvent("on#{eventName}", callback)
+    else
+      throw new Error("No add event support")
 
   getClasses: (node) ->
     if node.classList

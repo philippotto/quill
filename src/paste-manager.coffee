@@ -1,4 +1,3 @@
-_               = require('underscore')
 ScribeDOM       = require('./dom')
 ScribeDocument  = require('./document')
 ScribeRange     = require('./range')
@@ -27,7 +26,7 @@ class ScribePasteManager
       @container.innerHTML = ""
       @container.focus()
       _.defer( =>
-        doc = new ScribeDocument(@container)
+        doc = new ScribeDocument(@container, @editor.options)
         delta = doc.toDelta()
         # Need to remove trailing newline so paste is inline
         delta = delta.compose(Tandem.Delta.makeDeleteDelta(delta.endLength, delta.endLength - 1, 1))

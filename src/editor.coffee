@@ -1,4 +1,3 @@
-_                   = require('underscore')
 ScribeDOM           = require('./dom')
 ScribeDocument      = require('./document')
 ScribeKeyboard      = require('./keyboard')
@@ -96,7 +95,7 @@ insertAt = (index, text, formatting = {}) ->
           line = @doc.splitLine(line, offset + lineText.length)
         else
           line.trailingNewline = true
-          line.length += 1
+          line.resetContent()
       offset = 0
     )
   )
@@ -147,16 +146,11 @@ class ScribeEditor extends EventEmitter2
 
 
   constructor: (@iframeContainer, options = {}) ->
-    @options = _.defaults(options, ScribeEditor.DEFAULTS)
     @id = _.uniqueId(ScribeEditor.ID_PREFIX)
+    @options = _.defaults(options, ScribeEditor.DEFAULTS)
+    @options.renderer['id'] = @id
     @iframeContainer = document.getElementById(@iframeContainer) if _.isString(@iframeContainer)
     this.reset(true)
-    # Make sure we our selection is set to deepest textNode, prevent bug in Firefox when tabbing in
-    ScribeDOM.addEventListener(@root, 'focus', =>
-      range = this.getSelection()
-      this.setSelection(null, true)
-      this.setSelection(range, true)
-    )
     setInterval( =>
       checkUpdate.call(this)
     , 100)
@@ -277,9 +271,11 @@ class ScribeEditor extends EventEmitter2
             lineNode = lineNode.nextSibling
           )
           while lineNode != null
+            @doc.normalizer.normalizeLine(lineNode)
             newLine = @doc.appendLine(lineNode)
             lineNode = lineNode.nextSibling
         )
+        @innerHTML = @root.innerHTML    # trackDelta will emit events that may cause clients to call get functions
       , { silent: false, source: 'user' })
     )
 

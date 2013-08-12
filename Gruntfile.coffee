@@ -12,7 +12,7 @@ module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig
     meta:
-      version: '0.7.3'
+      version: '0.8.1'
 
     clean: ['build']
 
@@ -22,13 +22,6 @@ module.exports = (grunt) ->
         dest: 'build/'
         src: ['demo/scripts/*.coffee']
         ext: '.js'
-      src:
-        files: [{
-          expand: true
-          dest: 'build/'
-          src: ['src/**/*.coffee']
-          ext: '.js'
-        }]
       test:
         files: [{
           dest: 'build/tests/scripts/editor.js'
@@ -46,7 +39,7 @@ module.exports = (grunt) ->
         extensions: ['.js', '.coffee']
         requires: ['tandem-core']
       scribe:
-        files: [{ dest: 'build/scribe.js', src: ['src/scribe.coffee'] }]
+        files: [{ dest: 'build/scribe.js', src: ['index.coffee'] }]
       scribe_exposed:
         files: [{ dest: 'build/scribe-exposed.js', src: ['tests/scripts/scribe-exposed.coffee'] }]
       tandem_wrapper:
@@ -122,7 +115,7 @@ module.exports = (grunt) ->
         tasks: ['sass:demo']
       src:
         files: ['src/**/*.coffee', 'node_modules/tandem-core/src/*']
-        tasks: ['coffee:src', 'coffeeify', 'concat', 'copy:build']
+        tasks: ['coffeeify', 'concat', 'copy:build']
       test:
         files: ['tests/scripts/**/**/*.coffee']
         tasks: ['coffee:test']

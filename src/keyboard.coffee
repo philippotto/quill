@@ -1,4 +1,3 @@
-_               = require('underscore')
 ScribeDOM       = require('./dom')
 ScribeLine      = require('./line')
 ScribePosition  = require('./position')
@@ -31,7 +30,6 @@ _initHotkeys = ->
 
 _initListeners = ->
   ScribeDOM.addEventListener(@editor.root, 'keydown', (event) =>
-    event ||= window.event
     if @hotkeys[event.which]?
       prevent = false
       _.each(@hotkeys[event.which], (hotkey) =>
@@ -42,7 +40,6 @@ _initListeners = ->
         return unless selection?
         prevent = hotkey.callback.call(null, selection) == false
       )
-    event.preventDefault() if prevent
     return !prevent
   )
 

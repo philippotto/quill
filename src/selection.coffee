@@ -1,4 +1,3 @@
-_               = require('underscore')
 ScribeDOM       = require('./dom')
 ScribeLine      = require('./line')
 ScribeKeyboard  = require('./keyboard')
@@ -107,10 +106,15 @@ class ScribeSelection
         _.defer(checkUpdate)
       )
     )
+    setInterval( =>
+      checkUpdate() unless @range?    # Less important to detect existing range being unset
+    , 100)
 
   getDimensions: ->
     rangyRange = this.getNativeRange(false)
-    return rangyRange?.nativeRange?.getBoundingClientRect()
+    return null unless rangyRange?
+    nativeRange = rangyRange.nativeRange or rangyRange.textRange
+    return nativeRange.getBoundingClientRect()
     
   getNativeRange: (normalize = false) ->
     return null unless @nativeSelection
@@ -136,7 +140,7 @@ class ScribeSelection
       fn.call(null)
 
   setRange: (range, silent = false) ->
-    return unless @nativeSelection?
+    return unless @nativeSelection? and @editor.root.ownerDocument.activeElement?.tagName != 'BODY'
     @nativeSelection.removeAllRanges()
     if range?
       nativeRange = rangy.createRangyRange()

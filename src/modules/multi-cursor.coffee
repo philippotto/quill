@@ -1,4 +1,3 @@
-_               = require('underscore')
 ScribeDOM       = require('../dom')
 ScribeEditor    = require('../editor')
 ScribePosition  = require('../position')
@@ -29,9 +28,9 @@ _buildCursor = (name, color) ->
   return cursor
 
 _moveCursor = (cursor, referenceNode) ->
-  cursor.elem.style.top = referenceNode.offsetTop
-  cursor.elem.style.left = referenceNode.offsetLeft
-  cursor.elem.style.height = referenceNode.offsetHeight
+  cursor.elem.style.top = referenceNode.offsetTop + 'px'
+  cursor.elem.style.left = referenceNode.offsetLeft + 'px'
+  cursor.elem.style.height = referenceNode.offsetHeight + 'px'
   if parseInt(cursor.elem.style.top) < parseInt(cursor.elem.style.height)
     ScribeDOM.addClass(cursor.elem, 'top')
   else
@@ -96,8 +95,8 @@ class ScribeMultiCursor
     })
     @editor.renderer.on(ScribeRenderer.events.UPDATE, =>
       _.defer( =>
-        @container.style.top = @editor.root.offsetTop
-        @container.style.left = @editor.root.offsetLeft
+        @container.style.top = @editor.root.offsetTop + 'px'
+        @container.style.left = @editor.root.offsetLeft  + 'px'
       )
     )
     this.initListeners()
