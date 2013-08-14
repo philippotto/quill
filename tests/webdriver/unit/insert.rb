@@ -67,16 +67,16 @@ describe "Insert" do
     insert_at_every_position "abc\\ndef\\nghi"
   end
 
-  it "should insert a newline into the empty document" do
+  # Automation for https://gus.salesforce.com/a07B0000000VOml
+  it "should insert multiple newlines into the empty document" do
     start_delta = { "startLength" => 0,
                     "endLength" => 1,
                     "ops" => [{ "value" => "\n", "attributes" => {}}]}
-
     current_delta = { "startLength" => 1,
-                      "endLength" => 2,
-                      "ops" => [{ "value" => "\n", "attributes" => {} },
-                                { "start" => 0, "end" => 1}]}
-    run_insert_test start_delta, current_delta, "Inserting \n at start of empty document fails."
+                      "endLength" => 4,
+                      "ops" => [{ "value" => "\n\n\n", "attributes" => {} }, 
+                                { "start" => 0, "end" => 1 }]}
+    run_insert_test start_delta, current_delta, "Inserting multiple \n at start of empty doc fails."
   end
 
   it "should append a newline to nonempty document" do
