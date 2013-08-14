@@ -38,6 +38,7 @@ describe "Insert" do
     @editor = @driver.find_element(:class, "editor")
     @adapter = WebdriverAdapter.new @driver, @editor
     @adapter.focus()
+    @adapter.move_cursor 0
     ScribeDriver::JS.set_doc_delta
     @adapter.doc_length = ScribeDriver::JS.get_doc_length
     doc_length = ScribeDriver::JS.get_doc_length - 1 # - 1 accounts for phantom newline
