@@ -19,7 +19,7 @@ GEM
     multi_json (1.7.9)
     rubyzip (0.9.9)
     sass (3.2.7)
-    selenium-webdriver (2.34.0)
+    selenium-webdriver (2.35.0)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
       rubyzip
@@ -37,4 +37,4 @@ DEPENDENCIES
   highline (~> 1.6.16)
   minitest (~> 5.0.6)
   sass (~> 3.2.7)
-  selenium-webdriver (~> 2.34.0)
+  selenium-webdriver (~> 2.35.0)
