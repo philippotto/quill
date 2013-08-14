@@ -67,15 +67,16 @@ describe "Insert" do
     insert_at_every_position "abc\\ndef\\nghi"
   end
 
-  # Automation for https://gus.salesforce.com/a07B0000000VOml
   it "should insert multiple newlines into the empty document" do
     start_delta = { "startLength" => 0,
                     "endLength" => 1,
                     "ops" => [{ "value" => "\n", "attributes" => {}}]}
+
     current_delta = { "startLength" => 1,
                       "endLength" => 4,
-                      "ops" => [{ "value" => "\n\n\n", "attributes" => {} }, 
+                      "ops" => [{ "value" => "\n\n\n", "attributes" => {} },
                                 { "start" => 0, "end" => 1 }]}
+
     run_insert_test start_delta, current_delta, "Inserting multiple \n at start of empty doc fails."
   end
 
@@ -90,7 +91,7 @@ describe "Insert" do
                                 { "value" => "\n", "attributes" => {} },
                                 { "start" => 3, "end" => 4, "attributes" => {} }]}
 
-    run_insert_test start_delta, current_delta, "Inserting \n at start of empty document fails."
+    run_insert_test start_delta, current_delta, "Appending \n to nonempty document fails."
   end
 
   describe "tab" do
@@ -103,6 +104,7 @@ describe "Insert" do
                         "endLength" => 5,
                         "ops" => [{ "value" => "\t", "attributes" => {}},
                                   { "start" => 0, "end" => 4}]}
+
       run_insert_test start_delta, current_delta, "Failed inserting tab at 0th index."
     end
 
@@ -131,6 +133,7 @@ describe "Insert" do
                         "endLength" => 8,
                         "ops" => [{ "value" => "\tabc", "attributes" => {}},
                                   { "start" => 0, "end" => 4}]}
+
       run_insert_test start_delta, current_delta, "Failed inserting tab + text at 0th index."
     end
 
