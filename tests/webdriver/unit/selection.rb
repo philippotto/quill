@@ -55,7 +55,6 @@ describe "Highlight" do
     selection = ScribeDriver::JS.get_selection
     assert selection['start'] == 0
     assert selection['end'] == 7
-    assert selection['isBackwards'] == true
   end
 
   it "should highlight all" do
