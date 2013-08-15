@@ -58,6 +58,7 @@ describe "Highlight" do
   end
 
   it "should highlight all" do
+    skip "Highlight all only supported on Windows" unless WebdriverAdapter.os == :windows
     start_delta = { "startLength" => 0,
                     "endLength" => 8,
                     "ops" => [{ "value" => "abc\ndef\n", "attributes" => {}}]}

@@ -15,6 +15,7 @@ describe "Test Copy Paste" do
   end
 
   it "should copy and paste plain text" do
+    skip "Copy paste all only supported on Windows + Chrome" unless WebdriverAdapter.os == :windows && @driver.browser = :chrome
     @adapter.type_text "abc"
     @adapter.copy(0, 3)
     # XXX: Adapter's paste doesn't work yet
